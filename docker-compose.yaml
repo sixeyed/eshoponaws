@@ -1,0 +1,47 @@
+version: "3.6"
+
+services:
+  actions-eks-create-cluster:
+    image: sixeyed/actions-eks-create-cluster:1912
+    build:
+      context: ./actions/eks-create-cluster
+
+  actions-eks-create-secret:
+    image: sixeyed/actions-eks-create-secret:1912
+    build:
+      context: ./actions/eks-create-secret
+
+  actions-eks-stack-deploy:
+    image: sixeyed/actions-eks-stack-deploy:1912
+    build:
+      context: ./actions/eks-stack-deploy
+
+  actions-rds-create-database:
+    image: sixeyed/actions-rds-create-database:1912
+    build:
+      context: ./actions/rds-create-database
+
+  actions-rds-get-connection-string:
+    image: sixeyed/actions-rds-get-connection-string:1912
+    build:
+      context: ./actions/rds-get-connection-string
+
+  eshop-scaffold:
+    image: sixeyed/eshoponweb-eshop-web-svc:1912
+    build:
+      context: ./services/eshop
+
+  eshop-github-scaffold:
+    image: sixeyed/eshoponweb-github-svc:1912
+    build:
+      context: ./services/github
+
+  sql-server-scaffold:
+    image: sixeyed/eshoponweb-sql-server-svc:1912
+    build:
+      context: ./services/sql-server
+
+  no-op-scaffold:
+    image: sixeyed/eshoponweb-no-op-svc:1912
+    build:
+      context: ./services/no-op

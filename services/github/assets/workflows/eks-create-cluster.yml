@@ -1,0 +1,20 @@
+name: Create EKS cluster
+
+on: push
+
+jobs:
+
+  build:
+ 
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - name: Create EKS cluster 
+      uses: 'docker://sixeyed/actions-eks-create-cluster:1912'
+      env:
+        AWS_ACCESS_KEY_ID: {{`${{ secrets.AWS_ACCESS_KEY_ID }}`}}
+        AWS_SECRET_ACCESS_KEY: {{`${{ secrets.AWS_SECRET_ACCESS_KEY }}`}}
+        AWS_DEFAULT_REGION: {{range .Services}}{{if eq "aws" .ID}}{{.Parameters.region}}{{end}}{{end}}
+        EKS_CLUSTER_NAME: {{range .Services}}{{if eq "eks" .ID}}{{.Parameters.clusterName}}{{end}}{{end}}
+        EKS_NODE_COUNT: {{range .Services}}{{if eq "eks" .ID}}{{.Parameters.nodeCount}}{{end}}{{end}}
+        EKS_NODE_TYPE: {{range .Services}}{{if eq "eks" .ID}}{{.Parameters.nodeType}}{{end}}{{end}}

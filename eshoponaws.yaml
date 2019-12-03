@@ -1,0 +1,143 @@
+apiVersion: v1alpha1
+generated: "2018-06-13T09:24:07.392654524Z"
+kind: RepositoryContent
+services:
+  - apiVersion: v1alpha1
+    kind: ServiceTemplate
+    metadata:
+      name: aws
+      platforms:
+        - linux
+    spec:
+      description: AWS configuration
+      icon: https://raw.githubusercontent.com/sixeyed/eshoponaws/master/img/aws.png
+      source:
+        image: sixeyed/eshoponweb-no-op-svc:1912
+      title: AWS
+      parameters:
+        - name: region
+          defaultValue: eu-west-2
+          description: AWS region
+          type: string
+
+  - apiVersion: v1alpha1
+    kind: ServiceTemplate
+    metadata:
+      name: eks
+      platforms:
+        - linux
+    spec:
+      description: EKS configuration
+      icon: https://raw.githubusercontent.com/sixeyed/eshoponaws/master/img/eks.png
+      source:
+        image: sixeyed/eshoponweb-no-op-svc:1912
+      title: Amazon EKS
+      parameters:
+        - name: clusterName
+          description: Cluster name
+          type: string
+        - name: nodeCount
+          type: enum
+          values:
+            - value: "2"
+              description: "2"
+            - value: "3"
+              description: "3"
+            - value: "5"
+              description: "5"
+        - name: nodeType
+          type: enum
+          values:
+            - value: "t3a.small"
+              description: "t3a.small"
+            - value: "t3a.large"
+              description: "t3a.large"
+            - value: "m5a.large"
+              description: "m5a.large"
+
+  - apiVersion: v1alpha1
+    kind: ServiceTemplate
+    metadata:
+      name: github
+      platforms:
+        - linux
+    spec:
+      description: GitHub Actions to deploy to EKS
+      icon: https://raw.githubusercontent.com/sixeyed/eshoponaws/master/img/github.png
+      source:
+        image: sixeyed/eshoponweb-github-svc:1912
+      title: GitHub Actions
+      parameters:
+        - name: username
+          description: Username
+          type: string
+        - name: repoName
+          description: Repository name
+          type: string
+
+  - apiVersion: v1alpha1
+    kind: ServiceTemplate
+    metadata:
+      name: eshop-web
+      platforms:
+        - linux
+    spec:
+      description: Sample .NET Core web app
+      icon: https://raw.githubusercontent.com/sixeyed/eshoponaws/master/img/dotnet.png
+      source:
+        image: sixeyed/eshoponweb-eshop-web-svc:1912
+      title: eShop on Web
+      parameters:
+        - name: externalPort
+          defaultValue: "5100"
+          description: External port
+          type: hostPort
+
+  - apiVersion: v1alpha1
+    kind: ServiceTemplate
+    metadata:
+      name: sql-server
+      platforms:
+        - linux
+    spec:
+      description: SQL Server container
+      icon: https://raw.githubusercontent.com/sixeyed/eshoponaws/master/img/sql-server.jpg
+      source:
+        image: sixeyed/eshoponweb-sql-server-svc:1912
+      title: SQL Server
+      parameters:
+        - name: saPassword
+          defaultValue: "Pass@word"
+          description: SA password
+          type: string
+        - name: externalPort
+          defaultValue: "5433"
+          description: External port
+          type: hostPort
+
+templates:
+  - apiVersion: v1alpha1
+    kind: ApplicationTemplate
+    metadata:
+      name: eshoponaws
+      platforms:
+        - linux
+    spec:
+      title: eShop on Web
+      description: eShop on Web with deployment to AWS
+      services:
+        - name: .github
+          serviceId: github
+        - name: aws
+          serviceId: aws
+          parameters:
+            region: eu-west-2
+        - name: eks
+          serviceId: eks
+          parameters:
+            nodeCount: 2
+            nodeType: t3a.small
+        - name: eshop-web
+          serviceId: eshop-web
+        - name: sql-server
+          serviceId: sql-server
